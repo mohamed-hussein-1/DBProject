@@ -28,7 +28,9 @@ public class Table {
 	ArrayList<Integer> pages_loaded_number;
 	ArrayList<Boolean> pages_loaded_is_changed;
 	
-	
+	public Table(){
+		
+	}
 	public Table(String name){
 		table_name = name;
 		pageSize = 0;
@@ -41,6 +43,16 @@ public class Table {
 	// need to be implemented
 	public static Table buildTableFromCSV(String filePath,String tableName){
 		return new Table(tableName);
+	}
+	//just for tests
+	public static Table buildBuildedTable(String tableName,int pageSize){
+		Table tt = new Table();
+		tt.table_name = tableName;
+		tt.pageSize = pageSize;
+		tt.pages_loaded = new ArrayList<Page>();
+		tt.pages_loaded_is_changed = new ArrayList<Boolean>();
+		tt.pages_loaded_number = new ArrayList<Integer>();
+		return tt;
 	}
 	//insert row to the table :D
 	public void insertRowToTable(Row row) throws DBAppException, PageNotLoadedException{
@@ -78,7 +90,7 @@ public class Table {
 
 		pages_loaded.add(pageToLoad);
 		int indexInserted = pages_loaded.size()-1;
-		pages_loaded_number.add(pages_loaded.size()-1);
+		pages_loaded_number.add(page_number);
 		pages_loaded_is_changed.add(false);
 		return indexInserted;
 	}
@@ -130,31 +142,47 @@ public class Table {
 		
 		recordChange(page_number);
 	}
-	//need to be implemented
+	//this method serialize the page number ( save it on the disk )
 	public void savePage(int page_number) throws DBAppException, IOException{
 		int page_index = getPageIndexInArrayList(page_number);
 		Page pageToInsert = this.getPageByNumber(page_number);
-		OutputStream file = new FileOutputStream(this.table_name + "-" + page_number + ".ser");
-		OutputStream buffer = new BufferedOutputStream(file);
-		ObjectOutput output = new ObjectOutputStream(buffer);
-		output.writeObject(pageToInsert);
+		if (pages_loaded_is_changed.get(page_index).booleanValue() == false){
+			return;
+		}
+		pageToInsert.serializePage(this.table_name + "-" + page_number + ".ser");
 		Boolean b = pages_loaded_is_changed.get(page_index);
-		b = new Boolean("true");
+		b = new Boolean(false);
+	}
+	// this method saves all loaded pages
+	public void save() throws DBAppException, IOException{
+		int numberOfPages = pages_loaded.size();
+		for (int i = 0; i < numberOfPages; i++) {
+			savePage(i);
+		}
 	}
 	public static void main(String[] args) throws DBAppException, PageNotLoadedException, IOException {
-		Table t = new Table("t");
-		Row row = new Row(1);
-		String[] s = new String[1];
-		s[0] = "first att";
-		row.editColumnValue(0, s[0]);
-		t.insertRowToTable(row);
-		t.savePage(1);
-		Row r = new Row(1);
-		r.editColumnValue(0, "secondVal");
-		t.insertRowToTable(r);
-		t.savePage(1);
-		t.loadPage(1);
+//		Table t = new Table("t");
+//		Row row = new Row(1);
+//		String[] s = new String[1];
+//		s[0] = "first att";
+//		row.editColumnValue(0, s[0]);
+//		t.insertRowToTable(row);
+//		t.savePage(1);
+//		Row r = new Row(1);
+//		r.editColumnValue(0, "secondVal");
+//		t.insertRowToTable(r);
+//		t.savePage(1);
+//		t.loadPage(1);
+//		Row m = new Row(1);
+//		m.editColumnValue(0, "thirddVal");
+//		t.insertRowToTable(m);
+		
+		//Table t = buildBuildedTable("t",1);
+		Table t = buildBuildedTable("n",1);
 		Page p = t.getPageByNumber(1);
+//		Row r = new Row(1);
+//		r.editColumnValue(0, "secondVal");
+//		t.insertRowToTable(r);
 		System.out.println(p.toString());
 	}
 }

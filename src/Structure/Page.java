@@ -62,10 +62,11 @@ public class Page implements Serializable {
 	public void serializePage(String path){
 		try (
 				OutputStream file = new FileOutputStream(path);
-				OutputStream buffer = new BufferedOutputStream(file);
-				ObjectOutput output = new ObjectOutputStream(buffer);
+//				OutputStream buffer = new BufferedOutputStream(file);
+				ObjectOutput output = new ObjectOutputStream(file);
 				){
 			output.writeObject(this);
+			output.flush();
 		}  
 		catch(IOException ex){
 			ex.printStackTrace();
@@ -91,6 +92,17 @@ public class Page implements Serializable {
 		return null;
 	}
 	public static void main(String[] args) throws MaxRowsException {
+//		Page p = new Page();
+//		p.serializePage("p.ser");
+//		Page p = Page.deSerializePage("p.ser");
+//		Row r = new Row(1);
+//		r.editColumnValue(0,"tttt");
+//		p.insertRow(r);
+//		p.serializePage("p.ser");
+//		Page q = Page.deSerializePage("p.ser");
+//		System.out.println(q);
+	}
+	public static void test1() throws MaxRowsException{
 		Page p = new Page();
 		p.column_number = 1;
 		Row r = new Row(2);
@@ -103,6 +115,11 @@ public class Page implements Serializable {
 		p.insertRow(x);
 		p.serializePage("testpage.ser");
 		Page q = deSerializePage("testpage.ser");
+		System.out.println(q.toString());
+	}
+	public static void test2(){
+		Page q;
+		q = Page.deSerializePage("n-1.ser");
 		System.out.println(q.toString());
 	}
 	
