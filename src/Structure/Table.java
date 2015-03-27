@@ -1,17 +1,6 @@
 package Structure;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 import team_7adota.DBAppException;
@@ -22,6 +11,7 @@ public class Table {
 	String table_name;
 	int pageSize; //number of pages
 	String[] columns;
+	
 	Row[] tuples;
 	
 	ArrayList<Page> pages_loaded;
@@ -54,6 +44,14 @@ public class Table {
 		tt.pages_loaded_number = new ArrayList<Integer>();
 		return tt;
 	}
+	
+	public String[] getColumns() {
+		return columns;
+	}
+	public void setColumns(String[] columns) {
+		this.columns = columns;
+	}
+	
 	//insert row to the table :D
 	public void insertRowToTable(Row row) throws DBAppException, PageNotLoadedException{
 		//load the last page
@@ -86,7 +84,7 @@ public class Table {
 		}
 		
 		String path = this.table_name+"-"+page_number+".ser";
-		pageToLoad = Page.deSerializePage(this.table_name + "-" + page_number + ".ser");
+		pageToLoad = Page.deSerializePage(path);
 		pages_loaded.add(pageToLoad);
 		int indexInserted = pages_loaded.size()-1;
 		pages_loaded_number.add(page_number);
@@ -157,42 +155,12 @@ public class Table {
 	// this method saves all loaded pages
 	public void save() throws DBAppException, IOException{
 		int numberOfPages = pages_loaded.size();
-		for (int i = 0; i < numberOfPages; i++) {
+		for (int i = 1; i <= numberOfPages; i++) {
 			savePage(i);
 		}
 	}
 	public static void main(String[] args) throws DBAppException, PageNotLoadedException, IOException {
-//		Table t = new Table("t");
-//		Row row = new Row(1);
-//		String[] s = new String[1];
-//		s[0] = "first att";
-//		row.editColumnValue(0, s[0]);
-//		t.insertRowToTable(row);
-//		t.savePage(1);
-//		Row r = new Row(1);
-//		r.editColumnValue(0, "secondVal");
-//		t.insertRowToTable(r);
-//		t.savePage(1);
-//		t.loadPage(1);
-//		Row m = new Row(1);
-//		m.editColumnValue(0, "thirddVal");
-//		t.insertRowToTable(m);
 		
-//		Table t = buildBuildedTable("t",1);
-//		Table t = buildBuildedTable("n",1);
-//		Page p = t.getPageByNumber(1);
-//		Row r = new Row(1);
-//		r.editColumnValue(0, "secondVal");
-//		t.insertRowToTable(r);
-//		t.savePage(1);
-//		System.out.println(p.toString());
-		
-//		Page q = new Page();
-//		Row m = new Row(1);
-//		m.editColumnValue(0, "testPageInsedTable");
-//		q.insertRow(m);
-//		q.serializePage("q-1.ser");
-//		Page n = Page.deSerializePage("q-1.ser");
-//		System.out.println(n);
 	}
+	
 }

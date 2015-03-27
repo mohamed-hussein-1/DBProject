@@ -92,15 +92,7 @@ public class Page implements Serializable {
 		return null;
 	}
 	public static void main(String[] args) throws MaxRowsException {
-//		Page p = new Page();
-//		p.serializePage("p.ser");
-//		Page p = Page.deSerializePage("p.ser");
-//		Row r = new Row(1);
-//		r.editColumnValue(0,"tttt");
-//		p.insertRow(r);
-//		p.serializePage("p.ser");
-		Page q = Page.deSerializePage("p.ser");
-		System.out.println(q);
+		
 	}
 	public static void test1() throws MaxRowsException{
 		Page p = new Page();
