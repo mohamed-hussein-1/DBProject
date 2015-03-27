@@ -7,7 +7,9 @@ import team_7adota.DBAppException;
 
 public class Table {
 	
+	@SuppressWarnings("unused")
 	private final static String page_name = "[tableName + \"-\" + pageNumber ]";
+	
 	String table_name;
 	int pageSize; //number of pages
 	String[] columns;
@@ -50,6 +52,17 @@ public class Table {
 	}
 	public void setColumns(String[] columns) {
 		this.columns = columns;
+	}
+	public int getColumnIndex(String col) throws DBAppException{
+		int colSize = columns.length;
+		for (int i = 0;i<colSize;i++) {
+			String s = columns[i];
+			if (s.equals(col))
+				return i;
+		}
+		
+		//column not found
+		throw new DBAppException();
 	}
 	
 	//insert row to the table :D
@@ -159,6 +172,40 @@ public class Table {
 			savePage(i);
 		}
 	}
+	
+	public ArrayList<Selquery> selectLinearyValueFromTable(String column_name,String column_value) throws DBAppException{
+		
+		//load all pages
+		for(int i = 0; i <this.pageSize ; i++){
+			loadPage(i+1);
+		}
+		
+		//get ColumnIndexInRows
+		int colIndex = this.getColumnIndex(column_name);
+		
+		ArrayList<Selquery> result = new ArrayList<Selquery>();
+		
+		//iterate over rows , solution won't be sorted at all
+		int numberOfPagesLoaded = pages_loaded.size();
+		for (int i = 0; i < numberOfPagesLoaded; i++) {
+			Page p = pages_loaded.get(i);
+			int p_number = pages_loaded_number.get(i).intValue();
+			ArrayList<Selquery> qu = p.selAllFromPage(p_number);
+			int quSize = qu.size();
+			for (int j = 0; j < quSize; j++) {
+				Row r = qu.get(j).getRow();
+				String v = r.getColumnValue(colIndex);
+				if (v.equals(column_value)){
+					result.add(qu.get(j));
+				}
+			}
+		}
+		return result;
+		
+	}
+	
+	
+	
 	public static void main(String[] args) throws DBAppException, PageNotLoadedException, IOException {
 		
 	}

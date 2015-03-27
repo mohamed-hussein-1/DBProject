@@ -12,7 +12,7 @@ import Structure.Table;
 public class testStructure {
 	
 	public static void main(String[] args) throws DBAppException, PageNotLoadedException, IOException {
-		LaunchTestCustomer();
+		testSelInCustomer();
 	}
 	
 	//first test to create table with name customer
@@ -64,6 +64,18 @@ public class testStructure {
 	public static void LaunchTestCustomer() throws DBAppException, PageNotLoadedException, IOException{
 		createCustomer();
 		LoadCustomer();
+	}
+	
+	public static void testSelInCustomer() throws DBAppException{
+		Table t = Table.buildBuildedTable("customer",5);
+		String[] col = new String[4];
+		col[0] = "id" ;
+		col[1] = "first_name" ;
+		col[2] = "last_name";
+		col[3] = "dollars_spent";
+		t.setColumns(col);
+		
+		System.out.println(t.selectLinearyValueFromTable("id","5"));
 	}
 	
 }

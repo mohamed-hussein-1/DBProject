@@ -1,7 +1,6 @@
 package Structure;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,6 +11,7 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import team_7adota.DBAppException;
 
@@ -91,30 +91,12 @@ public class Page implements Serializable {
 			    }
 		return null;
 	}
-	public static void main(String[] args) throws MaxRowsException {
-		
+	public ArrayList<Selquery> selAllFromPage(int page_number){
+		ArrayList<Selquery> result = new ArrayList<Selquery>();
+		for (int i = 0; i < this.tuple_size; i++) {
+			Selquery q = new Selquery(tuples[i],page_number,i);
+			result.add(q);
+		}
+		return result;
 	}
-	public static void test1() throws MaxRowsException{
-		Page p = new Page();
-		p.column_number = 1;
-		Row r = new Row(2);
-		r.editColumnValue(0, "mrSehs");
-		r.editColumnValue(1, "mrAly");
-		p.insertRow(r);
-		Row x = new Row(2);
-		x.editColumnValue(0, "mrYassin");
-		x.editColumnValue(1, "mrTat");
-		p.insertRow(x);
-		p.serializePage("testpage.ser");
-		Page q = deSerializePage("testpage.ser");
-		System.out.println(q.toString());
-	}
-	public static void test2(){
-		Page q;
-		q = Page.deSerializePage("n-1.ser");
-		System.out.println(q.toString());
-		
-	}
-	
-	
 }
