@@ -85,9 +85,8 @@ public class Table {
 			throw new DBAppException();
 		}
 		
-
+		String path = this.table_name+"-"+page_number+".ser";
 		pageToLoad = Page.deSerializePage(this.table_name + "-" + page_number + ".ser");
-
 		pages_loaded.add(pageToLoad);
 		int indexInserted = pages_loaded.size()-1;
 		pages_loaded_number.add(page_number);
@@ -130,8 +129,9 @@ public class Table {
 		int index = getPageIndexInArrayList(page_number); 
 		if (index == -1)
 			throw new PageNotLoadedException();
-		Boolean newVal = pages_loaded_is_changed.get(index); 
-		newVal= new Boolean(true);
+//		Boolean newVal = pages_loaded_is_changed.get(index); 
+//		newVal= new Boolean(true);
+		pages_loaded_is_changed.set(index,new Boolean(true));
 	}
 	
 	// this method add a row to a page
@@ -150,8 +150,9 @@ public class Table {
 			return;
 		}
 		pageToInsert.serializePage(this.table_name + "-" + page_number + ".ser");
-		Boolean b = pages_loaded_is_changed.get(page_index);
-		b = new Boolean(false);
+//		Boolean b = pages_loaded_is_changed.get(page_index);
+//		b = new Boolean(false);
+		pages_loaded_is_changed.set(page_index,new Boolean(false));
 	}
 	// this method saves all loaded pages
 	public void save() throws DBAppException, IOException{
@@ -177,12 +178,21 @@ public class Table {
 //		m.editColumnValue(0, "thirddVal");
 //		t.insertRowToTable(m);
 		
-		//Table t = buildBuildedTable("t",1);
-		Table t = buildBuildedTable("n",1);
-		Page p = t.getPageByNumber(1);
+//		Table t = buildBuildedTable("t",1);
+//		Table t = buildBuildedTable("n",1);
+//		Page p = t.getPageByNumber(1);
 //		Row r = new Row(1);
 //		r.editColumnValue(0, "secondVal");
 //		t.insertRowToTable(r);
-		System.out.println(p.toString());
+//		t.savePage(1);
+//		System.out.println(p.toString());
+		
+//		Page q = new Page();
+//		Row m = new Row(1);
+//		m.editColumnValue(0, "testPageInsedTable");
+//		q.insertRow(m);
+//		q.serializePage("q-1.ser");
+//		Page n = Page.deSerializePage("q-1.ser");
+//		System.out.println(n);
 	}
 }
